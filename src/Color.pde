@@ -1,4 +1,4 @@
-struct Color {
+class Color {
     int black = 0xFF1A1C2C;
     int purple = 0xFF5D275D;
     int red = 0xFFB13E53;
