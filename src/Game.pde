@@ -1,95 +1,80 @@
-// Main game class that runs the game loop
-PFont menuFont;
-
 ImageHandler images;
 SoundHandler sounds;
 Color colors;
+Player player;
+PFont font;
+Menu menu;
 
-final int MENU = 0;
-final int GAMEPLAY = 1;
-final int PAUSE = 2;
-final int GAMEOVER = 3;
+final int MENU = 0, GAMEPLAY = 1, PAUSE = 2, GAMEOVER = 3;
 int gameState = MENU;
 int hoveredOption = -1;
 
-void setup() {
-    size(800, 600);
-    
-    // Load Font
-    menuFont = createFont("assets/fonts/treebyfivemodifi.ttf", 32);
-    textFont(menuFont, 32);
+boolean isResizable = true;
+float baseWidth = 288, baseHeight = 224, scaleFactor;
 
-    // Load the images
+void setup() {
+    background(0);
+    size(288, 224);
+    noSmooth(); 
+    surface.setResizable(isResizable);
+    
+    font = createFont("assets/fonts/treebyfivemodifi.ttf", 32);
+    textFont(font);
+    
     images = new ImageHandler();
     images.loadImages();
-
-    // Load the sounds
+    
     sounds = new SoundHandler(this);
     sounds.loadSounds();
-
-    // Load the colors
+    
     colors = new Color();
-
+    player = new Player(images, font, colors);
+    menu = new Menu(colors, font, player);
+    surface.setSize(288 * 3, 224 * 3);
 }
 
 void draw() {
-    background(0);
-    switch (gameState) {
+    updateScaleFactor();
+    
+    translate((width - baseWidth * scaleFactor) / 2,(height - baseHeight * scaleFactor) / 2);
+    scale(scaleFactor);
+    
+    switch(gameState) {
         case MENU:
-            displayMenu();
+            menu.updateHoveredOption(adjustedMouseX(), adjustedMouseY());
+            menu.display();
             break;
         case GAMEPLAY:
-            //runGameplay();
             break;
         case PAUSE:
-            //displayPauseMenu();
-            
+            break;
         case GAMEOVER:
-            //displayGameOver();
             break;
     }
+    player.display();
+    
+    resetMatrix();
 }
 
-void displayMenu() {
-    background(colors.black); 
-    
-    // Draw the game title
-    fill(colors.red); 
-    textSize(100); 
-    textAlign(CENTER, CENTER);
-    text("BEATBLADE", width / 2, 150); 
-    float titleWidth = textWidth("BEATBLADE");
-
-    float spacing = 60; 
-    
-    // Draw menu buttons
-    textSize(50);
-    float easyX = (width / 2) - (titleWidth / 2) + spacing; 
-    float quitX = (width / 2) + (titleWidth / 2) - spacing; 
-    float hardX = width / 2; 
-    float[] optionXs = {easyX, hardX, quitX};
-    String[] options = {"EASY", "HARD", "QUIT"};
-    int hoveredOption = -1; 
-    int optionY = height - 100;
-    float buttonHeight = textAscent() + textDescent();
-
-    for (int i = 0; i < options.length; i++) {
-        float optionWidth = textWidth(options[i]);
-        if (mouseX >= optionXs[i] - optionWidth / 2 && mouseX <= optionXs[i] + optionWidth / 2 &&
-            mouseY >= optionY - buttonHeight / 2 && mouseY <= optionY + buttonHeight / 2) {
-            hoveredOption = i;
-        }
-    }
-   
-    for (int i = 0; i < options.length; i++) {
-        float optionX = optionXs[i];
-        // Change color based on hover state
-        fill(i == hoveredOption ? colors.white : colors.red);
-
-        textAlign(CENTER, CENTER);
-        text(options[i], optionX, optionY); 
-    }
+void updateScaleFactor() {
+    scaleFactor = min(width / baseWidth, height / baseHeight);
 }
 
+float adjustedMouseX() {
+    float scaleX = width / baseWidth;
+    float scaleY = height / baseHeight;
+    float scaleFactor = min(scaleX, scaleY);
+    return(mouseX - (width - baseWidth * scaleFactor) / 2) / scaleFactor;
+}
 
+float adjustedMouseY() {
+    float scaleX = width / baseWidth;
+    float scaleY = height / baseHeight;
+    float scaleFactor = min(scaleX, scaleY);
+    return(mouseY - (height - baseHeight * scaleFactor) / 2) / scaleFactor;
+}
+
+void mousePressed() {
+    menu.handleClick();
+}
 

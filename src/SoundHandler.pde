@@ -1,8 +1,8 @@
-import processing.sound.*;
+import processing.sound.SoundFile;
 
 class SoundHandler {
     PApplet parent; 
-
+    
     SoundFile enemyDeath;
     SoundFile heavySlash1;
     SoundFile heavySlash2;
@@ -19,13 +19,13 @@ class SoundHandler {
     SoundFile weakSlash1;
     SoundFile weakSlash2;
     SoundFile weakSlash3;
-
+    
     // Constructor
     SoundHandler(PApplet p) {
         parent = p;
         loadSounds();
     }
-
+    
     void loadSounds() {
         enemyDeath = new SoundFile(parent, "assets/sounds/EnemyDeath.wav");
         heavySlash1 = new SoundFile(parent, "assets/sounds/HeavySlash1.wav");
