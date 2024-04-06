@@ -25,12 +25,27 @@ class Menu {
         text("BEATBLADE", baseWidth / 2, baseHeight / 6);
         
         // Options
-        textSize(16); 
+        textSize(16);
         float buttonY = 5 * baseHeight / 6;
         // Update and display options
         updateHoveredOption(adjustedMouseX(), adjustedMouseY());
         for (int i = 0; i < options.length; i++) {
-            fill(i == hoveredOption ? colors.white : colors.red);
+            // Draw white rectangle behind the text if the button is hovered
+            float textW = textWidth(options[i]);
+            float textH = 20; 
+            
+            float rectStartX = optionXs[i] - (textW / 2) - 3;
+            float rectEndX = optionXs[i] + (textW / 2) + 1;
+            float rectStartY = buttonY - (textH / 2) - 3;
+            float rectEndY = buttonY + (textH / 2) + 3;
+            
+            if (i == hoveredOption) {
+                fill(colors.white);
+                rectMode(CORNERS);
+                rect(rectStartX, rectStartY, rectEndX, rectEndY);
+            }
+            
+            fill(colors.red);
             text(options[i], optionXs[i], buttonY);
         }
     }
