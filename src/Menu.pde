@@ -1,30 +1,32 @@
 class Menu {
-    PFont menuFont;
-    Color colors;
-    int hoveredOption = -1;
-    String[] options = {"EASY", "HARD", "QUIT"};
-    float baseWidth = 288, baseHeight = 224; 
-    float[] optionXs = new float[]{baseWidth / 4, baseWidth / 2, 3 * baseWidth / 4};
-    Player player;
+    PFont menuFont; // Font for the menu
+    Color colors; // Color scheme for the menu
+    int hoveredOption = -1; // Index of the currently hovered option (-1 if none)
+    String[] options = {"EASY", "HARD", "QUIT"}; // Menu options
+    float baseWidth = 288, baseHeight = 224; // Base dimensions for the menu
+    float[] optionXs = new float[]{baseWidth / 4, baseWidth / 2, 3 * baseWidth / 4}; // X positions for the options
+    Player player; // Player instance
+    Battle battle; // Battle instance
     
-    
+    // Constructor
     Menu(Color colors, PFont menuFont, Player player) {
         this.colors = colors;
         this.menuFont = menuFont;
         this.player = player;
     }
     
+    // Display the menu
     void display() {
         textFont(menuFont);
         background(colors.black);
         fill(colors.red);
         
-        // Title
+        // Display title
         textSize(32);
         textAlign(CENTER, CENTER);
         text("BEATBLADE", baseWidth / 2, baseHeight / 6);
         
-        // Options
+        // Display options
         textSize(16);
         float buttonY = 5 * baseHeight / 6;
         // Update and display options
@@ -50,6 +52,7 @@ class Menu {
         }
     }
     
+    // Update the currently hovered option based on the mouse position
     void updateHoveredOption(float mouseXAdjusted, float mouseYAdjusted) {
         float buttonY = 5 * baseHeight / 6;
         hoveredOption = -1;
@@ -62,6 +65,7 @@ class Menu {
             }
         }
         
+        // Update player's emotion based on the hovered option
         if (hoveredOption == 0) { // EASY button
             player.setEmotion("angel");
         } else if (hoveredOption == 1) { // HARD button
@@ -71,25 +75,29 @@ class Menu {
         } else {
             player.setEmotion("none");
         }
-        
     }
     
+    // Handle click events
     void handleClick() {
         // Ensure a valid option is hovered before proceeding
         if (hoveredOption == -1) {
             return;
         }
         
+        // Perform action based on the hovered option
         switch(hoveredOption) {
             case 0 : // EASY
-                println("EASY clicked");
+                player.setEmotion("none");
+                battle = new Battle(images, sounds, player, true);
+                startBattleTransition(battle);
                 break;
             case 1 : // HARD
-                println("HARD clicked");
+                player.setEmotion("none");
+                battle = new Battle(images, sounds, player, false);
+                startBattleTransition(battle);
                 break;
             case 2 : // QUIT
                 exit();
         }
     }
-    
 }

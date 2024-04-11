@@ -1,44 +1,48 @@
 class Player {
     // Player sprites
-    PImage spriteAttack;
-    PImage spriteDefend;
-    PImage emojiSad;
-    PImage emojiAngel;
-    PImage emojiFunny;
+    PImage spriteAttack; // Image for attack state
+    PImage spriteDefend; // Image for defend state
+    PImage emojiSad; // Image for sad emotion
+    PImage emojiAngel; // Image for angel emotion
+    PImage emojiFunny; // Image for funny emotion
     
-    PFont font;
+    PFont font; // Font for displaying text
     
     // Player states and stats
-    String state = "attack";
-    String emotion = "none";
-    int health = 356;
-    int bpm = 100;
+    String state = "attack"; // Current state of the player
+    String emotion = "none"; // Current emotion of the player
+    int health = 356; // Health of the player
+    int bpm = 100; // Beats per minute (could be heart rate or music tempo)
     
     // Colors
-    Color colors;
+    Color colors; // Color scheme for the player
     
     // Position
-    float x, y;
-    float menuY; 
-    float battleY; 
+    float x, y; // Current position of the player
+    float targetY; // Target Y position for movement
+    float moveSpeed = 0.5; // Speed of movement
     
+    // Constructor
     Player(ImageHandler images, PFont font, Color colors) {
+        // Load images
         spriteAttack = images.playerAttack;
         spriteDefend = images.playerDefend;
         emojiSad = images.quitEmoji;    
         emojiAngel = images.easyEmoji;    
         emojiFunny = images.hardEmoji;
         
-        // Initial player position
+        // Set initial player position
         x = width / 2;
-        menuY = y = height / 2;
+        y = height / 2;
+        this.targetY = height / 2;
         
+        // Set colors and font
         this.colors = colors;
-        
         this.font = font;
         textFont(font);
     }
     
+    // Display the player
     void display() {
         // Set image mode to CENTER for drawing images centered at (x, y)
         imageMode(CENTER);
@@ -67,29 +71,41 @@ class Player {
         text(bpm, x + 18, y + 17);
     }
     
+    // Set the player's emotion
     void setEmotion(String newEmotion) {
         emotion = newEmotion;
     }
     
+    // Move the player up
+    void moveUp() {
+        this.targetY = baseHeight / 2;
+    }
+    
+    // Move the player down
+    void moveDown() {
+        this.targetY = baseHeight * 0.80;
+    }
+    
+    // Update the player's position
     void update() {
-        if (y != battleY) {
-            y = lerp(y, battleY, 0.05); 
+        float dy = targetY - y;
+        
+        // If the player is close enough to the target position, snap to it
+        if (abs(dy) < moveSpeed) {
+            y = targetY; 
+        } else {
+            // Otherwise, move towards the target position
+            y += moveSpeed * (dy > 0 ? 1 : - 1); 
         }
     }
     
-    void moveToBottom() {
-        battleY = height - spriteAttack.height;
-    }
-    
-    void moveToMiddle() {
-        battleY = menuY;
-    }
-    
+    // Reduce the player's health by a certain amount
     void takeDamage(int dmg) {
         health -= dmg;
         emotion = dmg > 100 ? "sad" : "none";
     }
     
+    // Deal damage to an enemy
     void dealDamage(int dmg) {
         emotion = dmg > 200 ? "funny" : "none";
     }
