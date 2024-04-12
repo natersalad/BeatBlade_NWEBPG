@@ -16,16 +16,16 @@ class Battle {
         
         if (isEasyMode) {
             background = images.background;
-            music = sounds.rhino;
+            sounds.rhino.play(); //plays rhino song
             monster = new Monster("Rhino", 300, 50, images.rhino);
         } else {
             background = images.background2;
-            music = sounds.riseOfTheDemonKing;
+            sounds.riseOfTheDemonKing.play();  //plays demon king song
             monster = new Monster("Demon", 600, 100, images.monster);
         }
         
-        
     }
+    
     
     void update() {
         

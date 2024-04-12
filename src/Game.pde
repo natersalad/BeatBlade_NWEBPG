@@ -123,9 +123,14 @@ void keyPressed() {
 void returnToMenu() {
     player.moveUp();
     fadeOpacity = 0;
+    sounds.pause.stop(); //pause noise plays once
+    sounds.pause.play(); //pause noise
+    sounds.rhino.stop(); //rhino song stops
+    sounds.riseOfTheDemonKing.stop();  //demon king song stops
     gameState = FADE_OUT;
     nextState = MENU;
-}
+} 
+
 
 // Start battle transition
 void startBattleTransition(Battle newBattle) {
