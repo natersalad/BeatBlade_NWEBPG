@@ -78,7 +78,7 @@ void draw() {
 // Handle fade out transition
 void fadeOut() {
     fill(0, fadeOpacity);
-    rect(0, 0, width, height);
+    rect( -baseWidth * scaleFactor, -baseWidth * scaleFactor, baseWidth * scaleFactor, baseWidth * scaleFactor);
     fadeOpacity += 3;
     
     if (fadeOpacity >= 255) {
@@ -96,7 +96,7 @@ void fadeIn() {
     }
     
     fill(0, fadeOpacity);
-    rect(0, 0, width, height);
+    rect( -baseWidth * scaleFactor, -baseWidth * scaleFactor, baseWidth * scaleFactor, baseWidth * scaleFactor);
     fadeOpacity -= 3;
     
     if (fadeOpacity <= 0) {
@@ -106,7 +106,7 @@ void fadeIn() {
 }
 
 void keyPressed() {
-    if (gameState == GAMEPLAY) {
+    if (gameState != MENU) {
         switch(key) {
             case ESC:
                 key = 0; // Neutralize default ESC functionality
@@ -123,10 +123,10 @@ void keyPressed() {
 void returnToMenu() {
     player.moveUp();
     fadeOpacity = 0;
-    sounds.pause.stop(); //pause noise plays once
-    sounds.pause.play(); //pause noise
-    sounds.rhino.stop(); //rhino song stops
-    sounds.riseOfTheDemonKing.stop();  //demon king song stops
+    sounds.getSound("Pause.mp3").stop(); //pause noise plays once
+    sounds.getSound("Pause.mp3").play(); //pause noise
+    sounds.getSound("Rhino.wav").stop(); //rhino song stops
+    sounds.getSound("RiseOfTheDemonKing.wav").stop();  //demon king song stops
     gameState = FADE_OUT;
     nextState = MENU;
 } 

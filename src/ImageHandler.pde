@@ -1,29 +1,29 @@
-class ImageHandler {
-    PImage background;
-    PImage background2;
-    PImage easyEmoji;
-    PImage hardEmoji;
-    PImage menu;
-    PImage monster;
-    PImage playerAttack;
-    PImage playerDefend;
-    PImage playerIcon;
-    PImage quitEmoji;
-    PImage rhino;
-    PImage tigerNinja;
+import java.io.File;
+import java.util.HashMap;
 
+class ImageHandler {
+    HashMap<String, PImage> images = new HashMap<String, PImage>();
+    
     void loadImages() {
-        background = loadImage("assets/images/Background.png");
-        background2 = loadImage("assets/images/Background2.png");
-        easyEmoji = loadImage("assets/images/EasyEmoij.png");
-        hardEmoji = loadImage("assets/images/HardEmoij.png");
-        menu = loadImage("assets/images/Menu.png");
-        monster = loadImage("assets/images/Monster.png");
-        playerAttack = loadImage("assets/images/PlayerAttack.png");
-        playerDefend = loadImage("assets/images/PlayerDefend.png");
-        playerIcon = loadImage("assets/images/PlayerIcon.png");
-        quitEmoji = loadImage("assets/images/QuitEmoji.png");
-        rhino = loadImage("assets/images/Rhino.png");
-        tigerNinja = loadImage("assets/images/TigerNinja.png");
+        String path = "assets/images"; // The path to your image directory
+        File dir = new File(sketchPath(path));
+        File[] files = dir.listFiles();
+        
+        if (files != null) {
+            for (File f : files) {
+                if (f.isFile()) {
+                    PImage img = loadImage(f.getAbsolutePath());
+                    images.put(f.getName(), img);
+                }
+            }
+        }
+    }
+    
+    PImage getImage(String filename) {
+        PImage img = images.get(filename);
+        if (img == null) {
+            println("Image not found: " + filename);
+        }
+        return img;
     }
 }

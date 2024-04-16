@@ -25,11 +25,11 @@ class Player {
     // Constructor
     Player(ImageHandler images, PFont font, Color colors) {
         // Load images
-        spriteAttack = images.playerAttack;
-        spriteDefend = images.playerDefend;
-        emojiSad = images.quitEmoji;    
-        emojiAngel = images.easyEmoji;    
-        emojiFunny = images.hardEmoji;
+        spriteAttack = images.getImage("PlayerAttack.png");
+        spriteDefend = images.getImage("PlayerDefend.png");
+        emojiSad = images.getImage("QuitEmoji.png");    
+        emojiAngel = images.getImage("EasyEmoji.png");    
+        emojiFunny = images.getImage("HardEmoji.png");
         
         // Set initial player position
         x = width / 2;

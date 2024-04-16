@@ -65,4 +65,3 @@ class Monster {
     
     // Additional methods for monster behavior (e.g., special attacks) can be added here
 }
-
