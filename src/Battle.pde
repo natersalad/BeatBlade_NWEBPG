@@ -42,10 +42,10 @@ class Battle {
             player.setBPM(96);
             background = images.getImage("Background2.png");
             music = sounds.getSound("RiseOfTheDemonKing.wav");
-            this.beatMap = new BeatMap("assets/DemonBeatMap.MID", 120, 0);
+            this.beatMap = new BeatMap("assets/DemonBeatMap.MID", 130, 0);
             music.play();
             //this.beatMap = new BeatMap("/Percussion.mid", 200);
-            monster = new Monster("Demon", 3000, 75, images.getImage("Monster.png"), this.beatMap, font, music);
+            monster = new Monster("Demon", 2500, 75, images.getImage("Monster.png"), this.beatMap, font, music);
         }
         
         
