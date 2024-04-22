@@ -8,7 +8,8 @@ Menu menu;
 Battle battle;
 
 // Define game states
-final int MENU = 0, GAMEPLAY = 1, PAUSE = 2, GAMEOVER = 3, FADE_OUT = 4, FADE_IN = 5;
+final int MENU = 0, GAMEPLAY = 1, PAUSE = 2, GAMEOVER = 3, FADE_OUT = 4, FADE_IN = 5, SETUP_BEATMAP = 6;
+
 int gameState = MENU; // Current game state
 int hoveredOption = -1; // Currently hovered menu option
 int fadeOpacity = 0; // Opacity for fade transitions
@@ -65,6 +66,9 @@ void draw() {
         case GAMEPLAY:
             battle.display(); // Display battle
             battle.update();
+            if (battle.gameOverFade >= 255) {
+                gameState = GAMEOVER;
+            }
             break;
         case GAMEOVER:
             break; // Handle game over state
@@ -106,27 +110,41 @@ void fadeIn() {
 }
 
 void keyPressed() {
-    if (gameState != MENU) {
+    if (gameState == FADE_OUT || gameState == FADE_IN) {
         switch(key) {
             case ESC:
-                key = 0; // Neutralize default ESC functionality
+                key = 0; // Prevent default behavior
+                returnToMenu();
+                break;
+        }
+    } else if (gameState == GAMEPLAY) {
+        switch(key) {
+            case ESC:
+                key = 0; // Prevent default behavior
                 returnToMenu();
                 break;
             case ENTER:
+                println("Time: " + millis());
+                println("On beat: " + battle.getBeatMap().isOnBeat());
                 battle.playerAttack(); 
                 break;
         }
+    } else if (gameState == GAMEOVER) {
+        key = 0; // Prevent default behavior
+        returnToMenu();
     }
 }
 
 // Return to Menu Transition
 void returnToMenu() {
     player.moveUp();
+    player.setBPM(100);
+    player.restoreHealth();
     fadeOpacity = 0;
-    sounds.getSound("Pause.mp3").stop(); //pause noise plays once
     sounds.getSound("Pause.mp3").play(); //pause noise
-    sounds.getSound("Rhino.wav").stop(); //rhino song stops
-    sounds.getSound("RiseOfTheDemonKing.wav").stop();  //demon king song stops
+    sounds.getSound("Rhino.wav").stop(); // Rewind the sound to the beginning
+    sounds.getSound("RiseOfTheDemonKing.wav").stop(); // Rewind the sound to the beginning
+    sounds.getSound("testsong.mp3").stop(); // Rewind the sound to the beginning
     gameState = FADE_OUT;
     nextState = MENU;
 } 

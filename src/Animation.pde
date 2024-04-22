@@ -11,8 +11,10 @@ class Animation {
     boolean isPlaying;
     boolean hasCompletedOnce;
     float baseWidth = 288, baseHeight = 224; // Base dimensions
+    BeatMap beatMap;
+    SoundHandler sounds;
     
-    Animation(ImageHandler images, String baseName, int frameCount, float scale) {
+    Animation(ImageHandler images, String baseName, int frameCount, float scale, BeatMap beatMap, SoundHandler sounds) {
         this.slashFrames = new PImage[frameCount];
         this.hitFrames = new PImage[frameCount];
         this.currentFrame = 0;
@@ -26,6 +28,8 @@ class Animation {
         this.baseName = baseName;
         this.isPlaying = false;
         this.hasCompletedOnce = false;
+        this.beatMap = beatMap;
+        this.sounds = sounds;
         
         
         // Load the frames for both the slash and hit effects
@@ -40,6 +44,39 @@ class Animation {
         lastUpdateTime = millis();
         isPlaying = true;
         hasCompletedOnce = false;
+        
+        if (beatMap.isOnBeat()) {
+            
+            switch(baseName) {
+                case "slash1_":
+                    sounds.getSound("HeavySlash1.wav").play();
+                    break;
+                case "slash2_":
+                    sounds.getSound("HeavySlash2.wav").play();
+                    break;
+                case "slash3_":
+                    sounds.getSound("HeavySlash3.wav").play();
+                    break;
+                case "slash4_":
+                    sounds.getSound("HeavySlash4.wav").play();
+                    break;
+            }
+        } else {
+            switch(baseName) {
+                case "slash1_":
+                    sounds.getSound("WeakSlash1.wav").play();
+                    break;
+                case "slash2_":
+                    sounds.getSound("WeakSlash2.wav").play();
+                    break;
+                case "slash3_":
+                    sounds.getSound("WeakSlash3.wav").play();
+                    break;
+                case "slash4_":
+                    sounds.getSound("WeakSlash1.wav").play();
+                    break;
+            }
+        }
     }
     
     void update() {
@@ -55,9 +92,10 @@ class Animation {
         if (hasCompletedOnce && currentFrame == 0) {
             isPlaying = false;
         }
+        
     }
     
-    void display() {
+    void display(boolean isHit) {
         if (isPlaying) {
             pushMatrix();
             // Calculate the scaled width and height for proper centering
@@ -65,32 +103,29 @@ class Animation {
             float sh = slashFrames[currentFrame].height * scale;
             translate(x - sw / 2, y - sh / 2);
             scale(scale);
-            
-            // Display slash frame
             image(slashFrames[currentFrame], 0, 0);
-            
-            // Display hit frame offset if needed
-            int startFrame = 1;
-            switch(baseName) {
-                case "slash1_":
-                    offsetX = 12;
-                    offsetY = 10;
-                    break;
-                case "slash2_":
-                    offsetX = 35;
+            if (isHit) {
+                // Display hit frame offset if needed
+                switch(baseName) {
+                    case"slash1_":
+                    offsetX = 0;
                     offsetY = 0;
                     break;
-                case "slash3_":
-                    offsetX = 35;
-                    offsetY = 28;
-                    break;
-                case "slash4_":
-                    offsetX = 50;
+                    case"slash2_":
+                    offsetX = 0;
                     offsetY = 0;
                     break;
+                    case"slash3_":
+                    offsetX = 10;
+                    offsetY = 20;
+                    break;
+                    case"slash4_":
+                    offsetX = 30;
+                    offsetY = 0;
+                    break;
+                }
+                image(hitFrames[currentFrame], offsetX, offsetY);
             }
-            
-            image(hitFrames[currentFrame], offsetX, offsetY);
             
             popMatrix();
         }

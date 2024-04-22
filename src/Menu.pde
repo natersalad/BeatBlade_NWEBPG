@@ -88,15 +88,18 @@ class Menu {
         switch(hoveredOption) {
             case 0 : // EASY
                 player.setEmotion("none");
-                battle = new Battle(images, sounds, player, true);
+                sounds.getSound("MenuMove.mp3").play();
+                battle = new Battle(images, sounds, player, menuFont, true);
                 startBattleTransition(battle);
                 break;
             case 1 : // HARD
                 player.setEmotion("none");
-                battle = new Battle(images, sounds, player, false);
+                sounds.getSound("MenuMove.mp3").play();
+                battle = new Battle(images, sounds, player, menuFont, false);
                 startBattleTransition(battle);
                 break;
             case 2 : // QUIT
+                sounds.getSound("MenuMove.mp3").play();
                 exit();
         }
     }

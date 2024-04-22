@@ -1,4 +1,4 @@
-import processing.sound.SoundFile;
+import processing.sound.*;
 import java.io.File;
 import java.util.HashMap;
 
@@ -30,7 +30,6 @@ class SoundHandler {
             println("No files found in directory: " + dir.getAbsolutePath());
         }
     }   
-    
     
     SoundFile getSound(String filename) {
         return sounds.get(filename);
