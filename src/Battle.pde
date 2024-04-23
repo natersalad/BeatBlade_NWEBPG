@@ -19,6 +19,7 @@ class Battle {
     
     boolean hitSoundPlayed = false; // Flag to check if the hit sound has been played
     int comboCount = 0; 
+    int maxComboCount = 0;
     
     boolean gameOver = false;
     float gameOverFade;
@@ -92,6 +93,10 @@ class Battle {
     }
     
     void update() {
+
+        if (comboCount > maxComboCount) {
+            maxComboCount = comboCount;
+        }
         
         if (isGameOver()) {
             comboCount = 0; // Reset the combo count
@@ -170,6 +175,12 @@ class Battle {
         textSize(42);
         textAlign(CENTER, CENTER);
         text("YOU WIN!", baseWidth / 2, baseHeight / 2);
+
+        fill(colors.white, gameOverFade);
+        textSize(16);
+        textAlign(CENTER, CENTER); // Center the text
+        text("MAX COMBO", baseWidth / 2, baseHeight / 10); // Adjust the position as needed
+        text(maxComboCount, baseWidth / 2, baseHeight / 5); // Adjust the position as needed
     }
     
     void displayLoss() {
