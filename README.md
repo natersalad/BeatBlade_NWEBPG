@@ -26,6 +26,7 @@ To download the game, you need to clone or download the repository from GitHub:
 1. Open the BEATBLADE folder
 2. Open src
 3. Double click Game.pde
-4. Click play button at the top right
+4. Download the Sound Libray
+5. Click play button at the top left
 
 # Enjoy!
