@@ -42,6 +42,7 @@ void setup() {
     player = new Player(images, font, colors);
     menu = new Menu(colors, font, player);
     surface.setSize(288 * 3, 224 * 3); // Set window size
+    surface.setIcon(images.getImage("PlayerIcon.png")); // Set window icon
 }
 
 void draw() {
